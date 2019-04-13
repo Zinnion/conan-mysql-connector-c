@@ -1,4 +1,4 @@
-#include <mysql.h>
+#include <mysqlx/xapi.h>
 #include <iostream>
 
 int main(int argc, char **argv)
