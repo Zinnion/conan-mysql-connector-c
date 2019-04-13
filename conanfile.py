@@ -11,7 +11,7 @@ class MysqlConnectorCConan(ConanFile):
     url = "https://github.com/Zinnion/conan-percona-server"
     description = "A percona server library for C development."
     topics = ("conan", "mysql", "sql", "connector", "database")
-    homepage = "https://cdn.mysql.com//Downloads"
+    homepage = "https://cdn.mysql.com//Downloads/Connector-C++"
     author = "Zinnion <mauro@zinnion.com>"
     license = "GPL-2.0"
     exports = ["LICENSE.md"]
@@ -23,18 +23,15 @@ class MysqlConnectorCConan(ConanFile):
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
-        self.requires.add("boost/1.68.0@conan/stable")
-
         if self.options.with_ssl:
             self.requires.add("OpenSSL/1.0.2o@conan/stable")
 
         if self.options.with_zlib:
             self.requires.add("zlib/1.2.11@conan/stable")
-        
 
     def source(self):
-        tools.get("{0}/MySQL-8.0/mysql-{1}.tar.gz".format(self.homepage, self.version))
-        extracted_dir = "mysql-" + self.version
+        tools.get("{0}/mysql-connector-c++-{1}-src.tar.gz".format(self.homepage, self.version))
+        extracted_dir = "mysql-connector-c++-" + self.version + "-src"
         os.rename(extracted_dir, self._source_subfolder)
 
         sources_cmake = os.path.join(self._source_subfolder, "CMakeLists.txt")
@@ -45,6 +42,10 @@ class MysqlConnectorCConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+
+        cmake.definitions["DOWNLOAD_BOOST"] = 1
+        cmake.definitions["DWITH_BOOST"] = self._source_subfolder
+        cmake.definitions["FORCE_INSOURCE_BUILD"] = 1
 
         if self.options.shared:
             cmake.definitions["DISABLE_SHARED"] = "OFF"
