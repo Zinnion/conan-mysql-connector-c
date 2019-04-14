@@ -6,10 +6,10 @@ import glob
 import os
 
 class MysqlConnectorCConan(ConanFile):
-    name = "conan-percona-server"
+    name = "mysql-connector-c"
     version = "8.0.15"
     url = "https://github.com/Zinnion/conan-percona-server"
-    description = "A percona server library for C development."
+    description = "A MySQL client library for C development."
     topics = ("conan", "mysql", "sql", "connector", "database")
     homepage = "https://cdn.mysql.com//Downloads/Connector-C++"
     author = "Zinnion <mauro@zinnion.com>"
