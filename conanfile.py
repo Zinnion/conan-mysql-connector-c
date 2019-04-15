@@ -22,7 +22,12 @@ class MysqlConnectorCConan(ConanFile):
     default_options = {'shared': False, 'with_ssl': True, 'with_zlib': True}
     _source_subfolder = "source_subfolder"
 
+    #def config_options(self):
+    #    del self.settings.compiler.libcxx
+
     def requirements(self):
+        self.requires.add("OpenSSL/1.0.2o@conan/stable")
+
         if self.options.with_ssl:
             self.requires.add("OpenSSL/1.0.2o@conan/stable")
 
@@ -42,28 +47,12 @@ class MysqlConnectorCConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-
-        cmake.definitions["DOWNLOAD_BOOST"] = 1
-        cmake.definitions["DWITH_BOOST"] = self._source_subfolder
-        cmake.definitions["FORCE_INSOURCE_BUILD"] = 1
-
-        if self.options.shared:
-            cmake.definitions["DISABLE_SHARED"] = "OFF"
-            cmake.definitions["DISABLE_STATIC"] = "ON"
-        else:
-            cmake.definitions["DISABLE_SHARED"] = "ON"
-            cmake.definitions["DISABLE_STATIC"] = "OFF"
-
-        if self.settings.compiler == "Visual Studio":
-            if self.settings.compiler.runtime == "MD" or self.settings.compiler.runtime == "MDd":
-                cmake.definitions["WINDOWS_RUNTIME_MD"] = "ON"
-
         if self.options.with_ssl:
             cmake.definitions["WITH_SSL"] = "system"
 
         if self.options.with_zlib:
             cmake.definitions["WITH_ZLIB"] = "system"
-
+       
         cmake.configure(source_dir=self._source_subfolder)
         cmake.build()
         cmake.install()
@@ -73,4 +62,4 @@ class MysqlConnectorCConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.bindirs = ['lib']
+        self.cpp_info.bindirs = ['lib','include']
