@@ -1,22 +1,31 @@
 #include <iostream>
 #include <mysqlx/xdevapi.h>
-using namespace std;
-using namespace mysqlx;
-
+ 
+using ::std::cout;
+using ::std::endl;
+ 
 int main()
 try {
-  cout <<"Getting session..." <<endl;
-  Session sess("root:password@127.0.0.1:33060");
-  //Session sess("localhost",33060,"root","password");
-  cout <<"Session accepted, getting schemas list ..." <<endl;
-  
-  //Get a list of all available schemas
-  std::list<Schema> schemaList = sess.getSchemas();
-  cout<<"Available schemas in this session:"<< endl;
-
-  //loop over all available schemas and print their name
-  for(Schema schema : schemaList) {
-    cout << schema.getName() <<endl;
+  using namespace ::mysqlx;
+ 
+  Session sess("user:password@host/schema");
+  Collection coll = sess
+                    .getDefaultSchema()
+                    .createCollection("myCollection", true);
+ 
+  coll.add(R"({ "name": "foo"; "age": 7 })").execute();
+ 
+  CollectionFind query = coll
+                         .find("age < :age")
+                         .fields("name", "age");
+ 
+  DocResult res = query.bind("age", 18).execute();
+ 
+  for (DbDoc doc : res)
+  {
+    cout << "name: " << doc["name"]
+         << ", age: " << doc["age"]
+         << endl;
   }
 }
 catch (const mysqlx::Error &err)
