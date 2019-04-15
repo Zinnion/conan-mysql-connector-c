@@ -26,10 +26,8 @@ class MysqlConnectorCConan(ConanFile):
     #    del self.settings.compiler.libcxx
 
     def requirements(self):
-        self.requires.add("OpenSSL/1.0.2o@conan/stable")
-
         if self.options.with_ssl:
-            self.requires.add("OpenSSL/1.0.2o@conan/stable")
+            self.requires.add("OpenSSL/1.1.1a@conan/stable")
 
         if self.options.with_zlib:
             self.requires.add("zlib/1.2.11@conan/stable")
@@ -62,4 +60,4 @@ class MysqlConnectorCConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.bindirs = ['lib','include']
+        #self.cpp_info.bindirs = ['lib']
