@@ -51,11 +51,12 @@ class MysqlConnectorCConan(ConanFile):
         if self.options.with_zlib:
             cmake.definitions["WITH_ZLIB"] = "system"
 
-        #flags =""
-        #if str(self.settings.compiler.libcxx) == "libstdc++":
-        #    flags = "-D_GLIBCXX_USE_CXX11_ABI=0"
-        #elif str(self.settings.compiler.libcxx) == "libstdc++11":
-        #    flags = "-D_GLIBCXX_USE_CXX11_ABI=1"
+        flags =""
+        if str(self.settings.compiler.libcxx) == "libstdc++":
+            flags = "-D_GLIBCXX_USE_CXX11_ABI=0"
+        elif str(self.settings.compiler.libcxx) == "libstdc++11":
+            flags = "-D_GLIBCXX_USE_CXX11_ABI=1"
+        cmake.definitions["CMAKE_CXX_FLAGS"] = flags
         #cmake.definitions["CMAKE_CXX_FLAGS"] = "-D_GLIBCXX_USE_CXX11_ABI=0"
 
         cmake.configure(source_dir=self._source_subfolder)
