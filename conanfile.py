@@ -51,9 +51,6 @@ class MysqlConnectorCConan(ConanFile):
         if self.options.with_zlib:
             cmake.definitions["WITH_ZLIB"] = "system"
         
-        #cmake.definitions["D_GLIBCXX_USE_CXX11_ABI"] = "0"
-        cmake.definitions["BUILD_STATIC"] = "OFF"
-
         cmake.configure(source_dir=self._source_subfolder)
         cmake.build()
         cmake.install()
@@ -63,5 +60,5 @@ class MysqlConnectorCConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.libs = ['mysqlcppconn8']
-        self.cpp_info.bindirs = ['lib']
+        #self.cpp_info.libs = ['mysqlcppconn8']
+        #self.cpp_info.bindirs = ['lib']
