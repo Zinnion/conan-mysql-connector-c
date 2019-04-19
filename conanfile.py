@@ -22,8 +22,8 @@ class MysqlConnectorCConan(ConanFile):
     default_options = {'shared': False, 'with_ssl': True, 'with_zlib': True}
     _source_subfolder = "source_subfolder"
 
-    #def config_options(self):
-    #    del self.settings.compiler.libcxx
+    def config_options(self):
+        del self.settings.compiler.libcxx
 
     def requirements(self):
         if self.options.with_ssl:
@@ -50,14 +50,9 @@ class MysqlConnectorCConan(ConanFile):
 
         if self.options.with_zlib:
             cmake.definitions["WITH_ZLIB"] = "system"
-
-        flags =""
-        if str(self.settings.compiler.libcxx) == "libstdc++":
-            flags = "-D_GLIBCXX_USE_CXX11_ABI=0"
-        elif str(self.settings.compiler.libcxx) == "libstdc++11":
-            flags = "-D_GLIBCXX_USE_CXX11_ABI=1"
-        cmake.definitions["CMAKE_CXX_FLAGS"] = flags
-        #cmake.definitions["CMAKE_CXX_FLAGS"] = "-D_GLIBCXX_USE_CXX11_ABI=0"
+        
+        #cmake.definitions["D_GLIBCXX_USE_CXX11_ABI"] = "0"
+        cmake.definitions["BUILD_STATIC"] = "OFF"
 
         cmake.configure(source_dir=self._source_subfolder)
         cmake.build()
@@ -68,4 +63,5 @@ class MysqlConnectorCConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        #self.cpp_info.bindirs = ['lib']
+        self.cpp_info.libs = ['mysqlcppconn8']
+        self.cpp_info.bindirs = ['lib']
