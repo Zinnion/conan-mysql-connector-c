@@ -15,3 +15,4 @@ https://downloads.mysql.com/docs/x-devapi-userguide-en.pdf
 `conan create . zinnion/stable --build missing -s compiler.libcxx=libstdc++11`
 
 
+https://dev.mysql.com/doc/connector-cpp/8.0/en/connector-cpp-apps-general-considerations.html
